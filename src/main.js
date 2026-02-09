@@ -75,6 +75,8 @@ const triggerConfetti = async () => {
     // Show error state
     confettiBtn.textContent = '❌ Error!';
     confettiBtn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+    confettiBtn.style.transform = 'translateY(0)';
+    confettiBtn.style.boxShadow = '0 4px 12px rgba(239, 68, 68, 0.3)';
     
     // Reset button after error display
     setTimeout(() => {
@@ -91,11 +93,14 @@ const triggerFireworksAnimation = async () => {
   }
   
   try {
-    // Set loading state
+    // Set loading state with proper styling for larger button
     isFireworksAnimating = true;
     fireworksBtn.disabled = true;
     fireworksBtn.textContent = '🚀 Launching...';
     fireworksBtn.style.opacity = '0.8';
+    fireworksBtn.style.transform = 'translateY(0)';
+    fireworksBtn.style.cursor = 'not-allowed';
+    fireworksBtn.style.animation = 'none'; // Stop hover animation
     
     // Trigger the fireworks animation
     await triggerFireworks();
@@ -108,9 +113,12 @@ const triggerFireworksAnimation = async () => {
   } catch (error) {
     console.error('Error triggering fireworks:', error);
     
-    // Show error state
+    // Show error state with proper styling for larger button
     fireworksBtn.textContent = '❌ Error!';
     fireworksBtn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+    fireworksBtn.style.transform = 'translateY(0)';
+    fireworksBtn.style.boxShadow = '0 8px 24px rgba(239, 68, 68, 0.3)';
+    fireworksBtn.style.animation = 'none';
     
     // Reset button after error display
     setTimeout(() => {
@@ -126,15 +134,22 @@ const resetConfettiButton = () => {
   confettiBtn.textContent = '🎉 Celebrate!';
   confettiBtn.style.opacity = '1';
   confettiBtn.style.background = 'linear-gradient(135deg, #f59e0b, #ef4444)';
+  confettiBtn.style.cursor = 'pointer';
+  confettiBtn.style.transform = 'translateY(0)';
+  confettiBtn.style.boxShadow = '0 4px 12px rgba(245, 158, 11, 0.3)';
 };
 
-// Reset fireworks button to original state
+// Reset fireworks button to original state with proper large button styling
 const resetFireworksButton = () => {
   isFireworksAnimating = false;
   fireworksBtn.disabled = false;
   fireworksBtn.textContent = '🎆 Fireworks!';
   fireworksBtn.style.opacity = '1';
   fireworksBtn.style.background = 'linear-gradient(135deg, #3b82f6, #8b5cf6)';
+  fireworksBtn.style.cursor = 'pointer';
+  fireworksBtn.style.transform = 'translateY(0)';
+  fireworksBtn.style.boxShadow = '0 8px 24px rgba(59, 130, 246, 0.3)';
+  fireworksBtn.style.animation = ''; // Re-enable hover animation
 };
 
 // Add click event listeners with error boundaries
@@ -171,12 +186,49 @@ window.addEventListener('error', (event) => {
       confettiBtn.textContent = '❌ Library Error';
       confettiBtn.disabled = true;
       confettiBtn.style.opacity = '0.5';
+      confettiBtn.style.cursor = 'not-allowed';
     }
     
     if (fireworksBtn) {
       fireworksBtn.textContent = '❌ Library Error';
       fireworksBtn.disabled = true;
       fireworksBtn.style.opacity = '0.5';
+      fireworksBtn.style.cursor = 'not-allowed';
+      fireworksBtn.style.animation = 'none';
     }
+  }
+});
+
+// Handle DOM content loaded to ensure proper initialization
+document.addEventListener('DOMContentLoaded', () => {
+  // Verify all required elements are present
+  if (!confettiBtn || !fireworksBtn) {
+    console.error('Required button elements not found in DOM');
+    return;
+  }
+  
+  // Verify library dependencies
+  if (!confetti || typeof confetti !== 'function') {
+    console.error('Canvas-confetti library not properly loaded');
+    
+    // Disable buttons if library isn't available
+    confettiBtn.textContent = '❌ Library Missing';
+    confettiBtn.disabled = true;
+    confettiBtn.style.opacity = '0.5';
+    
+    fireworksBtn.textContent = '❌ Library Missing';
+    fireworksBtn.disabled = true;
+    fireworksBtn.style.opacity = '0.5';
+    fireworksBtn.style.animation = 'none';
+  }
+});
+
+// Prevent button state issues during page unload
+window.addEventListener('beforeunload', () => {
+  if (isAnimating) {
+    resetConfettiButton();
+  }
+  if (isFireworksAnimating) {
+    resetFireworksButton();
   }
 });
