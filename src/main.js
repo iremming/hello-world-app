@@ -5,14 +5,31 @@ import { triggerConfettiSequence } from './confetti.js';
 
 console.log("Hello World app loaded");
 
+// Function to handle celebration button click
+function handleCelebrationClick(button) {
+  // Add clicked animation class
+  button.classList.add('clicked');
+  
+  // Disable button to prevent spam
+  button.disabled = true;
+  
+  // Trigger confetti animation sequence
+  triggerConfettiSequence();
+  
+  // Re-enable button after confetti sequence completes (2.5 seconds)
+  setTimeout(() => {
+    button.disabled = false;
+    button.classList.remove('clicked');
+  }, 2500);
+}
+
 // DOM ready check and button event listener
 document.addEventListener('DOMContentLoaded', function() {
   const celebrationButton = document.getElementById('celebration-button');
   
   if (celebrationButton) {
     celebrationButton.addEventListener('click', function() {
-      // Trigger confetti animation sequence
-      triggerConfettiSequence();
+      handleCelebrationClick(this);
     });
   }
 });
@@ -26,8 +43,7 @@ if (document.readyState === 'loading') {
   
   if (celebrationButton) {
     celebrationButton.addEventListener('click', function() {
-      // Trigger confetti animation sequence
-      triggerConfettiSequence();
+      handleCelebrationClick(this);
     });
   }
 }
