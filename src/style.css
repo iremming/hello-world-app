@@ -31,4 +31,36 @@ h1 {
 .subtitle {
   font-size: 1.1rem;
   color: #888;
+  margin-bottom: 2rem;
+}
+
+#confetti-btn {
+  font-family: inherit;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  color: white;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+  transition: all 0.3s ease;
+  transform: translateY(0);
+}
+
+#confetti-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+  background: linear-gradient(135deg, #fbbf24, #f87171);
+}
+
+#confetti-btn:active {
+  transform: translateY(0);
+  transition: all 0.1s ease;
+}
+
+#confetti-btn:focus {
+  outline: none;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3), 0 0 0 3px rgba(245, 158, 11, 0.2);
 }
