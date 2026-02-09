@@ -74,3 +74,65 @@ export function triggerConfettiBurst() {
     origin: { x: 1 }
   });
 }
+
+/**
+ * Triggers falling confetti from the top
+ */
+export function triggerFallingConfetti() {
+  confetti({
+    particleCount: 200,
+    spread: 160,
+    startVelocity: 30,
+    origin: { x: 0.5, y: 0 },
+    gravity: 0.8,
+    drift: 1
+  });
+}
+
+/**
+ * Triggers side cannon confetti effects
+ */
+export function triggerSideCannons() {
+  // Left cannon
+  confetti({
+    particleCount: 80,
+    angle: 45,
+    spread: 50,
+    origin: { x: 0.1, y: 0.8 },
+    colors: ['#ff0000', '#ffff00', '#00ff00', '#0000ff', '#ff00ff']
+  });
+  
+  // Right cannon
+  setTimeout(() => {
+    confetti({
+      particleCount: 80,
+      angle: 135,
+      spread: 50,
+      origin: { x: 0.9, y: 0.8 },
+      colors: ['#ff0000', '#ffff00', '#00ff00', '#0000ff', '#ff00ff']
+    });
+  }, 200);
+}
+
+/**
+ * Triggers a sequence of multiple confetti animations
+ */
+export function triggerConfettiSequence() {
+  // Initial burst
+  triggerCelebrationConfetti();
+  
+  // Side cannons after 300ms
+  setTimeout(() => {
+    triggerSideCannons();
+  }, 300);
+  
+  // Falling confetti after 800ms
+  setTimeout(() => {
+    triggerFallingConfetti();
+  }, 800);
+  
+  // Final burst after 1500ms
+  setTimeout(() => {
+    triggerConfettiBurst();
+  }, 1500);
+}

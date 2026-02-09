@@ -1,7 +1,7 @@
 // Hello World App
 // Main application entry point
 
-import { triggerBasicConfetti, triggerCelebrationConfetti } from './confetti.js';
+import { triggerConfettiSequence } from './confetti.js';
 
 console.log("Hello World app loaded");
 
@@ -11,8 +11,8 @@ document.addEventListener('DOMContentLoaded', function() {
   
   if (celebrationButton) {
     celebrationButton.addEventListener('click', function() {
-      // Trigger confetti animation
-      triggerCelebrationConfetti();
+      // Trigger confetti animation sequence
+      triggerConfettiSequence();
     });
   }
 });
@@ -26,8 +26,8 @@ if (document.readyState === 'loading') {
   
   if (celebrationButton) {
     celebrationButton.addEventListener('click', function() {
-      // Trigger confetti animation
-      triggerCelebrationConfetti();
+      // Trigger confetti animation sequence
+      triggerConfettiSequence();
     });
   }
 }
