@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "canvas-confetti": "^1.9.2"
+    "fireworks-js": "^2.10.7"
   },
   "devDependencies": {
     "vite": "^6.0.0"
