@@ -17,6 +17,10 @@ body {
 #app {
   text-align: center;
   padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
 }
 
 h1 {
@@ -31,7 +35,15 @@ h1 {
 .subtitle {
   font-size: 1.1rem;
   color: #888;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
 }
 
 #confetti-btn {
@@ -63,4 +75,108 @@ h1 {
 #confetti-btn:focus {
   outline: none;
   box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3), 0 0 0 3px rgba(245, 158, 11, 0.2);
+}
+
+#fireworks-btn {
+  font-family: inherit;
+  font-size: 2.2rem;
+  font-weight: 600;
+  padding: 28px 56px;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  color: white;
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+  transition: all 0.3s ease;
+  transform: translateY(0);
+  min-width: 280px;
+}
+
+#fireworks-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(59, 130, 246, 0.4);
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  animation: fireworksPulse 1.5s ease-in-out infinite;
+}
+
+#fireworks-btn:active {
+  transform: translateY(0);
+  transition: all 0.1s ease;
+}
+
+#fireworks-btn:focus {
+  outline: none;
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3), 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+#fireworks-btn:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+  transform: translateY(0);
+}
+
+@keyframes fireworksPulse {
+  0%, 100% {
+    box-shadow: 0 12px 32px rgba(59, 130, 246, 0.4);
+  }
+  50% {
+    box-shadow: 0 12px 32px rgba(139, 92, 246, 0.5), 0 0 20px rgba(139, 92, 246, 0.3);
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  #app {
+    padding: 20px;
+    gap: 20px;
+  }
+  
+  h1 {
+    font-size: 2rem;
+  }
+  
+  .subtitle {
+    font-size: 1rem;
+  }
+  
+  .button-container {
+    gap: 16px;
+    width: 100%;
+    max-width: 320px;
+  }
+  
+  #confetti-btn {
+    font-size: 1rem;
+    padding: 12px 24px;
+    width: 100%;
+  }
+  
+  #fireworks-btn {
+    font-size: 1.6rem;
+    padding: 20px 40px;
+    min-width: unset;
+    width: 100%;
+    max-width: 280px;
+  }
+}
+
+@media (max-width: 480px) {
+  #app {
+    padding: 16px;
+  }
+  
+  h1 {
+    font-size: 1.8rem;
+  }
+  
+  #fireworks-btn {
+    font-size: 1.4rem;
+    padding: 18px 36px;
+  }
+  
+  #confetti-btn {
+    font-size: 0.95rem;
+    padding: 10px 20px;
+  }
 }
