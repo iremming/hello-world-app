@@ -46,6 +46,8 @@ h1 {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7), 0 0 8px rgba(218, 165, 32, 0.3);
+  -webkit-font-smoothing: antialiased;
+  font-display: swap;
 }
 
 .subtitle {
