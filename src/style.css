@@ -35,27 +35,28 @@ body {
 
 h1 {
   font-family: 'UnifrakturMaguntia', serif;
-  font-size: 3rem;
+  font-size: clamp(2rem, 8vw, 4rem);
   font-weight: 400;
   margin-bottom: 12px;
   background: linear-gradient(135deg, #ffd700, #ff6b35, #ff1744);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7), 4px 4px 8px rgba(255, 215, 0, 0.3), -1px -1px 2px rgba(255, 107, 53, 0.2);
-  letter-spacing: 2px;
+  letter-spacing: clamp(1px, 0.5vw, 3px);
+  line-height: 1.1;
 }
 
 .subtitle {
-  font-size: 1.1rem;
+  font-size: clamp(0.9rem, 3vw, 1.1rem);
   color: #aaa;
   margin-bottom: 2rem;
 }
 
 #fireworks-btn {
   font-family: inherit;
-  font-size: 2.2rem;
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
   font-weight: 600;
-  padding: 28px 56px;
+  padding: clamp(16px, 4vw, 28px) clamp(32px, 8vw, 56px);
   border: none;
   border-radius: 20px;
   cursor: pointer;
@@ -107,4 +108,44 @@ h1 {
   opacity: 0.8;
   cursor: not-allowed;
   transform: translateY(0);
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  #app {
+    padding: 20px;
+  }
+  
+  h1 {
+    margin-bottom: 8px;
+  }
+  
+  .subtitle {
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  h1 {
+    font-size: 2.5rem;
+    letter-spacing: 1px;
+  }
+  
+  #fireworks-btn {
+    font-size: 1.8rem;
+    padding: 20px 40px;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 320px) {
+  h1 {
+    font-size: 2rem;
+  }
+  
+  #fireworks-btn {
+    font-size: 1.5rem;
+    padding: 16px 32px;
+  }
 }
