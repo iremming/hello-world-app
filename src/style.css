@@ -42,9 +42,10 @@ h1 {
   line-height: 1.2;
   letter-spacing: 0.05em;
   margin-bottom: 12px;
-  background: linear-gradient(135deg, #ffd700, #ff6b35, #ff1744);
+  background: linear-gradient(135deg, #8B4513, #DAA520, #B8860B, #CD853F);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7), 0 0 8px rgba(218, 165, 32, 0.3);
 }
 
 .subtitle {
