@@ -37,8 +37,10 @@ body {
 
 h1 {
   font-family: 'UnifrakturMaguntia', serif, 'Times New Roman', Georgia;
-  font-size: 3rem;
+  font-size: 4.5rem;
   font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.05em;
   margin-bottom: 12px;
   background: linear-gradient(135deg, #ffd700, #ff6b35, #ff1744);
   -webkit-background-clip: text;
