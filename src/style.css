@@ -34,8 +34,9 @@ body {
 }
 
 h1 {
+  font-family: 'UnifrakturMaguntia', serif;
   font-size: 3rem;
-  font-weight: 700;
+  font-weight: 400;
   margin-bottom: 12px;
   background: linear-gradient(135deg, #ffd700, #ff6b35, #ff1744);
   -webkit-background-clip: text;
