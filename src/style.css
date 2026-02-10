@@ -34,7 +34,7 @@ body {
 }
 
 h1 {
-  font-family: 'Cinzel', 'Times New Roman', 'Book Antiqua', Georgia, serif;
+  font-family: 'Cinzel', 'Times New Roman', 'Book Antiqua', 'Palatino Linotype', Georgia, 'Old Standard TT', serif;
   font-size: 3rem;
   font-weight: 700;
   margin-bottom: 12px;
