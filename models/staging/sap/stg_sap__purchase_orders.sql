@@ -1,73 +1,98 @@
 {{
-  config(
-    materialized='view',
-    schema='staging'
-  )
+    config(
+        materialized='view',
+        unique_key=['purchase_order']
+    )
 }}
 
-SELECT
-  PurchaseOrder AS purchase_order_id,
-  CompanyCode AS company_code,
-  PurchaseOrderType AS purchase_order_type,
-  PurchasingDocumentDeletionCode AS deletion_indicator,
-  PurchasingProcessingStatus AS processing_status,
-  CreatedByUser AS created_by_user,
-  CreationDate AS creation_date,
-  LastChangeDateTime AS last_change_datetime,
-  Supplier AS supplier_id,
-  PurchaseOrderSubtype AS purchase_order_subtype,
-  Language AS language_code,
-  PaymentTerms AS payment_terms,
-  CashDiscount1Days AS cash_discount_1_days,
-  CashDiscount2Days AS cash_discount_2_days,
-  NetPaymentDays AS net_payment_days,
-  CashDiscount1Percent AS cash_discount_1_percent,
-  CashDiscount2Percent AS cash_discount_2_percent,
-  PurchasingOrganization AS purchasing_organization,
-  PurchasingDocumentOrigin AS document_origin,
-  PurchasingGroup AS purchasing_group,
-  PurchaseOrderDate AS order_date,
-  DocumentCurrency AS currency_code,
-  ExchangeRate AS exchange_rate,
-  ExchangeRateIsFixed AS exchange_rate_fixed,
-  ValidityStartDate AS validity_start_date,
-  ValidityEndDate AS validity_end_date,
-  SupplierQuotationExternalID AS supplier_quotation_id,
-  PurchasingCollectiveNumber AS collective_number,
-  SupplierRespSalesPersonName AS supplier_sales_person,
-  SupplierPhoneNumber AS supplier_phone,
-  SupplyingSupplier AS supplying_supplier_id,
-  SupplyingPlant AS supplying_plant,
-  IncotermsClassification AS incoterms,
-  CorrespncExternalReference AS external_reference,
-  CorrespncInternalReference AS internal_reference,
-  InvoicingParty AS invoicing_party,
-  ReleaseIsNotCompleted AS release_not_completed,
-  PurchasingCompletenessStatus AS completeness_status,
-  IncotermsVersion AS incoterms_version,
-  IncotermsLocation1 AS incoterms_location_1,
-  IncotermsLocation2 AS incoterms_location_2,
-  ManualSupplierAddressID AS manual_address_id,
-  IsEndOfPurposeBlocked AS purpose_blocked,
-  AddressCityName AS supplier_city,
-  AddressFaxNumber AS supplier_fax,
-  AddressHouseNumber AS supplier_house_number,
-  AddressName AS supplier_name,
-  AddressPostalCode AS supplier_postal_code,
-  AddressStreetName AS supplier_street,
-  AddressPhoneNumber AS supplier_phone_number,
-  AddressRegion AS supplier_region,
-  AddressCountry AS supplier_country,
-  AddressCorrespondenceLanguage AS correspondence_language,
-  PurgAggrgdProdCmplncSuplrSts AS compliance_status,
-  PurgAggrgdProdMarketabilitySts AS marketability_status,
-  PurgAggrgdSftyDataSheetStatus AS safety_sheet_status,
-  PurgProdCmplncTotDngrsGoodsSts AS dangerous_goods_status,
-  YY1_HeaderRetention_PDH AS header_retention,
-  YY1_RetentionType_PDH AS retention_type,
-  YY1_MaxRetention_PDH AS max_retention,
-  YY1_HeaderRetention_PDHF AS header_retention_flag,
-  YY1_MaxRetention_PDHF AS max_retention_flag,
-  YY1_RetentionType_PDHF AS retention_type_flag,
-  YY1_RetentionType_PDHT AS retention_type_text
-FROM {{ source('sap', 'A_PurchaseOrderType') }}
+with source as (
+    select *
+    from {{ source('sap', 'A_PurchaseOrderType') }}
+),
+
+renamed as (
+    select
+        -- Primary key
+        purchaseorder as purchase_order,
+
+        -- Basic purchase order information
+        companycode as company_code,
+        purchaseordertype as purchase_order_type,
+        supplier,
+        purchasingorganization as purchasing_organization,
+        purchasinggroup as purchasing_group,
+        documentcurrency as document_currency,
+
+        -- Dates (converted from EDM.DateTime format)
+        {{ convert_sap_date('purchaseorderdate') }} as purchase_order_date,
+        {{ convert_sap_date('creationdate') }} as creation_date,
+        {{ convert_sap_date('lastchangedatetime') }} as last_change_datetime,
+
+        -- Basic details
+        createdbyuser as created_by_user,
+        paymentterms as payment_terms,
+        incotermsclassification as incoterms_classification,
+
+        -- Status flags
+        purchasingprocessingstatus as purchasing_processing_status,
+        purchasingdocumentdeletioncode as purchasing_document_deletion_code,
+        purchasingcompletenessstatus as purchasing_completeness_status,
+        releaseisnotcompleted as release_is_not_completed,
+
+        -- Additional header information
+        purchaseordersubtype as purchase_order_subtype,
+        language,
+        purchasingdocumentorigin as purchasing_document_origin,
+        exchangerate as exchange_rate,
+        exchangerateisfixed as exchange_rate_is_fixed,
+        
+        -- Validity dates
+        {{ convert_sap_date('validitystartdate') }} as validity_start_date,
+        {{ convert_sap_date('validityenddate') }} as validity_end_date,
+
+        -- Supplier details
+        supplierquotationexternalid as supplier_quotation_external_id,
+        purchasingcollectivenumber as purchasing_collective_number,
+        supplierrespsalespersonname as supplier_resp_sales_person_name,
+        supplierphonenumber as supplier_phone_number,
+        supplyingsupplier as supplying_supplier,
+        supplyingplant as supplying_plant,
+
+        -- Address information
+        addresscityname as address_city_name,
+        addressfaxnumber as address_fax_number,
+        addresshousenumber as address_house_number,
+        addressname as address_name,
+        addresspostalcode as address_postal_code,
+        addressstreetname as address_street_name,
+        addressphonenumber as address_phone_number,
+        addressregion as address_region,
+        addresscountry as address_country,
+        addresscorrespondencelanguage as address_correspondence_language,
+
+        -- Financial terms
+        cashdiscount1days as cash_discount_1_days,
+        cashdiscount2days as cash_discount_2_days,
+        netpaymentdays as net_payment_days,
+        cashdiscount1percent as cash_discount_1_percent,
+        cashdiscount2percent as cash_discount_2_percent,
+
+        -- Correspondence references
+        correspncinternalreference as correspondence_internal_reference,
+        correspncexternalreference as correspondence_external_reference,
+        invoicingparty as invoicing_party,
+
+        -- Incoterms details
+        incotermsversion as incoterms_version,
+        incotermslocation1 as incoterms_location_1,
+        incotermslocation2 as incoterms_location_2,
+
+        -- Additional fields
+        manualsupplieraddressid as manual_supplier_address_id,
+        isendofpurposeblocked as is_end_of_purpose_blocked
+
+    from source
+)
+
+select *
+from renamed
