@@ -1,0 +1,94 @@
+version: 2
+
+models:
+  - name: stg_sap__purchase_orders
+    description: "Staging model for SAP purchase order headers. Represents the header-level information for purchase orders created in the SAP system. Source: EKKO table."
+    columns:
+      - name: purchaseorder
+        description: "Purchase order number. Source: EKKO.EBELN"
+        tests:
+          - not_null
+          - unique
+
+      - name: companycode
+        description: "Company code. Source: EKKO.BUKRS"
+        tests:
+          - not_null
+
+      - name: purchasetype
+        description: "Purchase order type. Source: EKKO.BSART"
+        tests:
+          - not_null
+
+      - name: purchasingdocumentdeletioncode
+        description: "Purchasing document deletion code. Source: EKKO.LOEKZ"
+
+      - name: purchasingprocessingstatus
+        description: "Purchasing processing status. Source: EKKO.STATU"
+
+      - name: createdbyuser
+        description: "User who created the purchase order. Source: EKKO.ERNAM"
+
+      - name: creationdate
+        description: "Creation date of the purchase order. Source: EKKO.AEDAT"
+
+      - name: lastchangedatetime
+        description: "Last change date and time. Source: EKKO.LPONR"
+
+      - name: supplier
+        description: "Supplier number. Source: EKKO.LIFNR"
+        tests:
+          - not_null
+
+      - name: purchasetypesubtype
+        description: "Purchase order subtype. Source: EKKO.UNSEZ"
+
+      - name: language
+        description: "Language key. Source: EKKO.SPRAS"
+
+      - name: paymentterms
+        description: "Payment terms. Source: EKKO.ZTERM"
+
+      - name: purchasingorganization
+        description: "Purchasing organization. Source: EKKO.EKORG"
+        tests:
+          - not_null
+
+      - name: purchasingdocumentorigin
+        description: "Purchasing document origin. Source: EKKO.URSPS"
+
+      - name: purchasinggroup
+        description: "Purchasing group. Source: EKKO.EKGRP"
+
+      - name: purchaseorderdate
+        description: "Purchase order date. Source: EKKO.BEDAT"
+
+      - name: documentcurrency
+        description: "Document currency. Source: EKKO.WAERS"
+
+      - name: incotermsclassification
+        description: "Incoterms classification. Source: EKKO.INCO1"
+
+      - name: addresscityname
+        description: "Supplier address city name. Source: EKKO.ORT01"
+
+      - name: addresspostalcode
+        description: "Supplier address postal code. Source: EKKO.PSTLZ"
+
+      - name: addressstreetname
+        description: "Supplier address street name. Source: EKKO.STRAS"
+
+      - name: addressregion
+        description: "Supplier address region. Source: EKKO.REGIO"
+
+      - name: addresscountry
+        description: "Supplier address country. Source: EKKO.LAND1"
+
+      - name: y1_headerretention_pdh
+        description: "Header retention. Source: EKKO.YY1_HeaderRetention_PDH"
+
+      - name: y1_retentiontype_pdh
+        description: "Header retention type. Source: EKKO.YY1_RetentionType_PDH"
+
+      - name: y1_maxretention_pdh
+        description: "Header maximum retention. Source: EKKO.YY1_MaxRetention_PDH"
