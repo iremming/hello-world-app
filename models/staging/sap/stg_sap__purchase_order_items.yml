@@ -1,0 +1,238 @@
+version: 2
+
+models:
+  - name: stg_sap__purchase_order_items
+    description: "Staging model for SAP Purchase Order Items. Represents line items within a purchase order, containing details like material, quantity, price, and delivery information. Source: EKPO."
+    columns:
+      - name: purchase_order
+        description: "Purchase order number. Source: EKPO.EBELN"
+        tests:
+          - not_null
+          - unique
+
+      - name: purchase_order_item
+        description: "Purchase order item number. Source: EKPO.EBELP"
+        tests:
+          - not_null
+
+      - name: material
+        description: "Material number. Source: EKPO.MATNR"
+        tests:
+          - not_null
+
+      - name: plant
+        description: "Plant. Source: EKPO.WERKS"
+
+      - name: storage_location
+        description: "Storage location. Source: EKPO.LGORT"
+
+      - name: order_quantity
+        description: "Order quantity. Source: EKPO.MENGE"
+
+      - name: purchase_order_quantity_unit
+        description: "Purchase order quantity unit. Source: EKPO.MEINS"
+
+      - name: net_price_amount
+        description: "Net price amount. Source: EKPO.NETPR"
+
+      - name: material_group
+        description: "Material group. Source: EKPO.MATKL"
+
+      - name: purchase_order_item_text
+        description: "Purchase order item text. Source: EKPO.TXZ01"
+
+      - name: account_assignment_category
+        description: "Account assignment category. Source: EKPO.KNTTP"
+
+      - name: supplier_material_number
+        description: "Supplier material number. Source: EKPO.IDNLF"
+
+      - name: tax_code
+        description: "Tax code. Source: EKPO.MWSKZ"
+
+      - name: purchase_order_item_category
+        description: "Purchase order item category. Source: EKPO.PSTYP"
+
+      - name: is_completely_delivered
+        description: "Is completely delivered. Source: EKPO.ELIKZ"
+
+      - name: is_finally_invoiced
+        description: "Is finally invoiced. Source: EKPO.EREKZ"
+
+      - name: batch
+        description: "Batch. Source: EKPO.CHARG"
+
+      - name: record_type
+        description: "Record type for subcontracting components. Source: A_POSubcontractingComponentType.RecordType"
+
+      - name: required_quantity
+        description: "Required quantity for subcontracting components. Source: A_POSubcontractingComponentType.RequiredQuantity"
+
+      - name: base_unit
+        description: "Base unit for subcontracting components. Source: A_POSubcontractingComponentType.BaseUnit"
+
+      - name: requirement_date
+        description: "Requirement date for subcontracting components. Source: A_POSubcontractingComponentType.RequirementDate"
+
+      - name: yy1_item_level_retention_pdi
+        description: "Item level retention. Source: A_PurchaseOrderItemType.YY1_ItemLevelRetention_PDI"
+
+      - name: yy1_item_level_retention_pdif
+        description: "Item level retention flag. Source: A_PurchaseOrderItemType.YY1_ItemLevelRetention_PDIF"
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - purchase_order
+            - purchase_order_item
+
+  - name: stg_sap__products
+    description: "Staging model for SAP Materials/Products. Represents the master data for materials, including basic information like product type, weight, and dimensions. Source: MARA."
+    columns:
+      - name: product
+        description: "Material number. Source: MARA.MATNR"
+        tests:
+          - not_null
+          - unique
+
+      - name: product_type
+        description: "Material type. Source: MARA.MTART"
+        tests:
+          - not_null
+
+      - name: product_group
+        description: "Material group. Source: MARA.MATKL"
+
+      - name: base_unit
+        description: "Base unit of measure. Source: MARA.MEINS"
+
+      - name: gross_weight
+        description: "Gross weight. Source: MARA.BRGEW"
+
+      - name: weight_unit
+        description: "Weight unit. Source: MARA.GEWEI"
+
+      - name: creation_date
+        description: "Creation date. Source: MARA.ERSDA"
+
+      - name: net_weight
+        description: "Net weight. Source: MARA.NTGEW"
+
+      - name: division
+        description: "Division. Source: MARA.SPART"
+
+      - name: cross_plant_status
+        description: "Cross-plant material status. Source: A_ProductType.CrossPlantStatus"
+
+      - name: product_hierarchy
+        description: "Product hierarchy. Source: A_ProductType.ProductHierarchy"
+
+      - name: is_batch_management_required
+        description: "Batch management requirement indicator. Source: A_ProductType.IsBatchManagementRequired"
+
+      - name: is_marked_for_deletion
+        description: "Deletion indicator. Source: A_ProductType.IsMarkedForDeletion"
+
+      - name: product_is_configurable
+        description: "Configurable product indicator. Source: A_ProductType.ProductIsConfigurable"
+
+      - name: brand
+        description: "Brand. Source: A_ProductType.Brand"
+
+      - name: industry_sector
+        description: "Industry sector. Source: A_ProductType.IndustrySector"
+
+      - name: country_of_origin
+        description: "Country of origin. Source: A_ProductType.CountryOfOrigin"
+
+      - name: yy1_bonus_percentage_prd
+        description: "Bonus percentage. Source: A_ProductType.YY1_BonusPercentage_PRD"
+
+      - name: yy1_bonus_validity_start_prd
+        description: "Bonus validity start date. Source: A_ProductType.YY1_BonusValidityStart_PRD"
+
+      - name: yy1_bonus_validity_end_prd
+        description: "Bonus validity end date. Source: A_ProductType.YY1_BonusValidityEnd_PRD"
+
+  - name: stg_sap__product_plants
+    description: "Staging model for SAP Material Plant Data. Represents material-specific data at the plant level, including MRP, procurement, and storage information. Source: MARC."
+    columns:
+      - name: product
+        description: "Material number. Source: MARC.MATNR"
+        tests:
+          - not_null
+
+      - name: plant
+        description: "Plant. Source: MARC.WERKS"
+        tests:
+          - not_null
+
+      - name: purchasing_group
+        description: "Purchasing group. Source: MARC.EKGRP"
+
+      - name: mrp_type
+        description: "MRP type. Source: MARC.DISMM"
+
+      - name: mrp_responsible
+        description: "MRP controller. Source: MARC.DISPO"
+
+      - name: abc_indicator
+        description: "ABC indicator. Source: MARC.MAABC"
+
+      - name: procurement_type
+        description: "Procurement type. Source: MARC.BESKZ"
+
+      - name: is_batch_management_required
+        description: "Batch management requirement indicator. Source: A_ProductPlantType.IsBatchManagementRequired"
+
+      - name: is_marked_for_deletion
+        description: "Deletion indicator. Source: A_ProductPlantType.IsMarkedForDeletion"
+
+      - name: product_is_configurable
+        description: "Configurable product indicator. Source: A_ProductPlantType.ProductIsConfigurable"
+
+      - name: base_unit
+        description: "Base unit of measure. Source: A_ProductPlantType.BaseUnit"
+
+      - name: availability_check_type
+        description: "Availability check type. Source: A_ProductPlantType.AvailabilityCheckType"
+
+      - name: country_of_origin
+        description: "Country of origin. Source: A_ProductPlantType.CountryOfOrigin"
+
+      - name: fiscal_year_variant
+        description: "Fiscal year variant. Source: A_ProductPlantType.FiscalYearVariant"
+
+      - name: profit_center
+        description: "Profit center. Source: A_ProductPlantType.ProfitCenter"
+
+      - name: goods_receipt_duration
+        description: "Goods receipt processing time. Source: A_ProductPlantType.GoodsReceiptDuration"
+
+      - name: minimum_lot_size_quantity
+        description: "Minimum lot size quantity. Source: A_ProductPlantType.MinimumLotSizeQuantity"
+
+      - name: maximum_lot_size_quantity
+        description: "Maximum lot size quantity. Source: A_ProductPlantType.MaximumLotSizeQuantity"
+
+      - name: fixed_lot_size_quantity
+        description: "Fixed lot size quantity. Source: A_ProductPlantType.FixedLotSizeQuantity"
+
+      - name: stock_in_transfer_quantity
+        description: "Stock in transfer quantity. Source: A_ProductPlantType.StockInTransferQuantity"
+
+      - name: stock_in_transit_quantity
+        description: "Stock in transit quantity. Source: A_ProductPlantType.StockInTransitQuantity"
+
+      - name: is_negative_stock_allowed
+        description: "Negative stock allowed indicator. Source: A_ProductPlantType.IsNegativeStockAllowed"
+
+      - name: serial_number_profile
+        description: "Serial number profile. Source: A_ProductPlantType.SerialNumberProfile"
+
+      - name: product_cfop_category
+        description: "Product CFOP category. Source: A_ProductPlantType.ProductCFOPCategory"
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - product
+            - plant
