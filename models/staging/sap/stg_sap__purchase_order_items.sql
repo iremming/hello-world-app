@@ -1,40 +1,88 @@
-{{
-  config(
-    materialized='view',
-    schema='staging'
-  )
-}}
+with source as (
+    select *
+    from {{ source('sap', 'A_PurchaseOrderItemType') }}
+),
 
-SELECT
-  CAST(poi."PurchaseOrder" AS VARCHAR(10)) AS purchase_order_number,
-  CAST(poi."PurchaseOrderItem" AS VARCHAR(5)) AS purchase_order_item,
-  CAST(poi."Material" AS VARCHAR(18)) AS material_number,
-  CAST(poi."Plant" AS VARCHAR(4)) AS plant,
-  CAST(poi."StorageLocation" AS VARCHAR(4)) AS storage_location,
-  CAST(poi."MaterialGroup" AS VARCHAR(9)) AS material_group,
-  CAST(poi."OrderQuantity" AS DECIMAL(13,3)) AS order_quantity,
-  CAST(poi."PurchaseOrderQuantityUnit" AS VARCHAR(3)) AS order_unit,
-  CAST(poi."NetPriceAmount" AS DECIMAL(11,2)) AS net_price,
-  CAST(poi."DocumentCurrency" AS VARCHAR(5)) AS currency,
-  CAST(poi."PurchaseOrderItemText" AS VARCHAR(40)) AS item_description,
-  CAST(poi."AccountAssignmentCategory" AS VARCHAR(1)) AS account_assignment_category,
-  CAST(po."Supplier" AS VARCHAR(10)) AS supplier_number,
-  CAST(s."SupplierName" AS VARCHAR(35)) AS supplier_name,
-  CAST(po."PurchaseOrderDate" AS DATE) AS order_date,
-  CAST(po."CreatedByUser" AS VARCHAR(12)) AS created_by,
-  CAST(po."CreationDate" AS DATE) AS creation_date,
-  CAST(po."PaymentTerms" AS VARCHAR(4)) AS payment_terms,
-  CAST(po."PurchasingOrganization" AS VARCHAR(4)) AS purchasing_organization,
-  CAST(po."PurchasingGroup" AS VARCHAR(3)) AS purchasing_group,
-  CAST(po."DocumentCurrency" AS VARCHAR(5)) AS document_currency,
-  CAST(po."IncotermsClassification" AS VARCHAR(3)) AS incoterms,
-  CAST(s."Country" AS VARCHAR(3)) AS supplier_country,
-  CAST(s."PostalCode" AS VARCHAR(10)) AS supplier_postal_code,
-  CAST(s."City" AS VARCHAR(25)) AS supplier_city,
-  CAST(s."Region" AS VARCHAR(3)) AS supplier_region,
-  CAST(s."AccountGroup" AS VARCHAR(4)) AS supplier_account_group
-FROM {{ source('sap', 'A_PurchaseOrderItemType') }} poi
-LEFT JOIN {{ source('sap', 'A_PurchaseOrderType') }} po 
-  ON poi."PurchaseOrder" = po."PurchaseOrder"
-LEFT JOIN {{ source('sap', 'A_SupplierType') }} s 
-  ON po."Supplier" = s."Supplier"
+renamed as (
+    select
+        PurchaseOrder as purchase_order_number,
+        PurchaseOrderItem as purchase_order_item_number,
+        Material as material_number,
+        Plant as plant_code,
+        StorageLocation as storage_location,
+        OrderQuantity as order_quantity,
+        PurchaseOrderQuantityUnit as order_unit,
+        OrderPriceUnit as price_unit,
+        NetPriceAmount as net_price,
+        MaterialGroup as material_group,
+        PurchaseOrderItemText as item_description,
+        AccountAssignmentCategory as account_assignment_category,
+        SupplierMaterialNumber as supplier_material_number,
+        TaxCode as tax_code,
+        ShippingInstruction as shipping_instructions,
+        TaxDeterminationDate as tax_determination_date,
+        TaxCountry as tax_country,
+        PriceIsToBePrinted as is_price_printed,
+        OverdelivTolrtdLmtRatioInPct as overdelivery_tolerance,
+        UnderdelivTolrtdLmtRatioInPct as underdelivery_tolerance,
+        ValuationType as valuation_type,
+        IsCompletelyDelivered as is_completely_delivered,
+        IsFinallyInvoiced as is_finally_invoiced,
+        PurchaseOrderItemCategory as item_category,
+        GoodsReceiptIsExpected as goods_receipt_expected,
+        GoodsReceiptIsNonValuated as goods_receipt_non_valuated,
+        InvoiceIsExpected as invoice_expected,
+        InvoiceIsGoodsReceiptBased as invoice_goods_receipt_based,
+        ItemNetWeight as item_net_weight,
+        ItemWeightUnit as weight_unit,
+        TaxJurisdiction as tax_jurisdiction,
+        ItemVolume as item_volume,
+        ItemVolumeUnit as volume_unit,
+        SupplierConfirmationControlKey as confirmation_control_key,
+        IncotermsClassification as incoterms_classification,
+        IncotermsTransferLocation as incoterms_transfer_location,
+        PurchaseRequisition as purchase_requisition_number,
+        PurchaseRequisitionItem as purchase_requisition_item,
+        IsReturnsItem as is_returns_item,
+        RequisitionerName as requisitioner_name,
+        ServicePackage as service_package,
+        EarmarkedFunds as earmarked_funds,
+        InternationalArticleNumber as international_article_number,
+        ManufacturerMaterial as manufacturer_material_number,
+        ServicePerformer as service_performer,
+        ProductType as product_type,
+        ExpectedOverallLimitAmount as expected_limit_amount,
+        OverallLimitAmount as overall_limit_amount,
+        PurchasingParentItem as parent_item,
+        Batch as batch_number,
+        PurchasingItemIsFreeOfCharge as is_free_of_charge,
+        ReferenceDeliveryAddressID as reference_delivery_address_id,
+        DeliveryAddressID as delivery_address_id,
+        DeliveryAddressName as delivery_address_name,
+        DeliveryAddressFullName as delivery_address_full_name,
+        DeliveryAddressStreetName as delivery_address_street,
+        DeliveryAddressHouseNumber as delivery_address_house_number,
+        DeliveryAddressCityName as delivery_address_city,
+        DeliveryAddressPostalCode as delivery_address_postal_code,
+        DeliveryAddressRegion as delivery_address_region,
+        DeliveryAddressCountry as delivery_address_country,
+        DownPaymentType as down_payment_type,
+        DownPaymentPercentageOfTotAmt as down_payment_percentage,
+        DownPaymentAmount as down_payment_amount,
+        DownPaymentDueDate as down_payment_due_date,
+        BR_MaterialUsage as br_material_usage,
+        BR_MaterialOrigin as br_material_origin,
+        BR_CFOPCategory as br_cfop_category,
+        BR_IsProducedInHouse as br_is_produced_in_house,
+        ConsumptionTaxCtrlCode as consumption_tax_code,
+        PurgProdCmplncSupplierStatus as supplier_compliance_status,
+        PurgProductMarketabilityStatus as product_marketability_status,
+        PurgSafetyDataSheetStatus as safety_data_sheet_status,
+        PurgProdCmplncDngrsGoodsStatus as dangerous_goods_status,
+        YY1_ItemLevelRetention_PDI as item_retention,
+        YY1_ItemLevelRetention_PDIF as item_retention_flag
+    from source
+)
+
+select *
+from renamed
