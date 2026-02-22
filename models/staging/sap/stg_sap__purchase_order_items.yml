@@ -1,0 +1,251 @@
+version: 2
+
+models:
+  - name: stg_sap__purchase_order_items
+    description: |
+      Purchase order line items from SAP. Each record represents a single material/item 
+      on a purchase order. Source entity: A_PurchaseOrderItemType.
+    
+    columns:
+      - name: purchase_order
+        description: Purchase order number. Source: EKPO.EBELN
+        tests:
+          - not_null
+          - unique:
+              combination_of: [purchase_order, purchase_order_item]
+      
+      - name: purchase_order_item
+        description: Purchase order item number. Source: EKPO.EBELP
+        tests:
+          - not_null
+          - unique:
+              combination_of: [purchase_order, purchase_order_item]
+      
+      - name: material_number
+        description: Material number. Source: EKPO.MATNR
+        tests:
+          - not_null
+      
+      - name: plant
+        description: Plant code. Source: EKPO.WERKS
+        tests:
+          - not_null
+      
+      - name: storage_location
+        description: Storage location. Source: EKPO.LGORT
+      
+      - name: material_group
+        description: Material group. Source: EKPO.MATKL
+      
+      - name: purchase_order_item_text
+        description: Item description text. Source: EKPO.TXZ01
+      
+      - name: purchasing_info_record
+        description: Purchasing info record number. Source: EKPO.INFNR
+      
+      - name: supplier_material_number
+        description: Supplier's material number. Source: EKPO.IDNLF
+      
+     quantity_and_price_data:
+      - name: order_quantity
+        description: Order quantity. Source: EKPO.MENGE
+      
+      - name: order_quantity_unit
+        description: Order quantity unit of measure. Source: EKPO.MEINS
+      
+      - name: order_price_unit
+        description: Order price unit. Source: EKPO.PEINH
+      
+      - name: order_price_unit_numerator
+        description: Numerator for price unit conversion. Source: EKPO.KPEIN
+      
+      - name: order_price_unit_denominator
+        description: Denominator for price unit conversion. Source: EKPO.KPEIN
+      
+      - name: document_currency
+.description: Document currency. Source: EKPO.WAERS
+      
+      - name: net_price_amount
+        description: Net price amount. Source: EKPO.NETPR
+      
+      - name: net_price_quantity
+        description: Net price quantity. Source: EKPO.NETPR
+      
+      - name: tax_code
+        description: Tax code. Source: EKPO.MWSKZ
+      
+      - name: shipping_instruction
+        description: Shipping instruction. Source: EKPO.EVERS
+      
+      - name: tax_determination_date
+        description: Tax determination date. Source: EKPO.VADAT
+      
+      - name: tax_country
+        description: Tax country. Source: EKPO.LANDS
+      
+      - name: price_is_to_be_printed
+        description: Price is to be printed indicator. Source: EKPO.DRUNK
+      
+      - name: valuation_type
+        description: Valuation type. Source: EKPO.BWTTY
+
+  - name: stg_sap__purchase_orders
+    description: |
+      Purchase order headers from SAP. Each record represents a purchase order document.
+      Source entity: A_PurchaseOrderType.
+    
+    columns:
+      - name: purchase_order
+        description: Purchase order number. Source: EKKO.EBELN
+        tests:
+          - not_null
+          - unique
+      
+      - name: company_code
+        description: Company code. Source: EKKO.BUKRS
+        tests:
+          - not_null
+      
+      - name: purchase_order_type
+        description: Purchase order type. Source: EKKO.BSART
+      
+      - name: supplier
+        description: Supplier number. Source: EKKO.LIFNR
+        tests:
+          - not_null
+      
+      - name: purchasing_organization
+        description: Purchasing organization. Source: EKKO.EKORG
+      
+      - name: purchasing_group
+        description: Purchasing group. Source: EKKO.EKGRP
+      
+      - name: document_currency
+        description: Document currency. Source: EKKO.WAERS
+      
+      - name: purchase_order_date
+        description: Purchase order date. Source: EKKO.BEDAT
+      
+      - name: creation_date
+        description: Creation date. Source: EKKO.AEDAT
+      
+      - name: created_by_user
+        description: Created by user. Source: EKKO.ERNAM
+      
+      - name: payment_terms
+        description: Payment terms. Source: EKKO.ZTERM
+      
+      - name: incoterms_classification
+        description: Incoterms classification. Source: EKKO.INCO1
+      
+      - name: purchasing_processing_status
+        description: Purchasing processing status. Source: EKKO.STATU
+      
+      - name: purchasing_document_deletion_code
+        description: Purchasing document deletion code. Source: EKKO.LOEKZ
+      
+      - name: purchasing_completeness_status
+        description: Purchasing completeness status. Source: EKKO.FRGRL
+      
+      - name: release_is_not_completed
+        description: Release is not completed indicator. Source: EKKO.FRGKE
+      
+      - name: purchase_order_subtype
+        description: Purchase order subtype. Source: EKKO.BSART
+      
+      - name: language
+        description: Language key. Source: EKKO.SPRAS
+      
+      - name: purchasing_document_origin
+        description: Purchasing document origin. Source: EKKO.KONTS
+      
+      - name: exchange_rate
+        description: Exchange rate. Source: EKKO.KURRF
+      
+      - name: exchange_rate_is_fixed
+        description: Exchange rate is fixed indicator. Source: EKKO.KURSF
+      
+      - name: validity_start_date
+        description: Validity start date. Source: EKKO.KDATB
+      
+      - name: validity_end_date
+        description: Validity end date. Source: EKKO.KDATE
+
+  - name: stg_sap__products
+    description: |
+      Master data for materials/products from SAP. Each record represents a material master.
+      Source entity: A_ProductType.
+    
+    columns:
+      - name: material_number
+        description: Material number. Source: MARA.MATNR
+        tests:
+          - not_null
+          - unique
+      
+      - name: product_type
+        description: Product type. Source: MARA.MTART
+        tests:
+          - not_null
+      
+      - name: product_group
+        description: Product group. Source: MARA.MATKL
+      
+      - name: base_unit
+        description: Base unit of measure. Source: MARA.MEINS
+        tests:
+          - not_null
+      
+      - name: product_hierarchy
+        description: Product hierarchy. Source: MARA.PRDHA
+      
+      - name: division
+        description: Division. Source: MARA.SPART
+      
+      - name: item_category_group
+        description: Item category group. Source: MARA.MTPOS_MARA
+      
+      - name: industry_sector
+        description: Industry sector. Source: MARA.MBRSH
+      
+      - name: gross_weight
+        description: Gross weight. Source: MARA.BRGEW
+      
+      - name: net_weight
+        description: Net weight. Source: MARA.NTGEW
+      
+      - name: weight_unit
+        description: Weight unit. Source: MARA.GEWEI
+      
+      - name: material_volume
+        description: Material volume. Source: MARA.VOLUM
+      
+      - name: volume_unit
+        description: Volume unit. Source: MARA.VOLEH
+      
+      - name: creation_date
+        description: Creation date. Source: MARA.ERSDA
+      
+      - name: last_change_date
+        description: Last change date. Source: MARA.LAEDA
+      
+      - name: last_change_datetime
+        description: Last change date/time. Source: MARA.AENAM
+      
+      - name: cross_plant_status_validity_date
+        description: Cross plant status validity date. Source: MARA.MSTAE
+      
+      -name: validity_start_date
+        description: Validity start date. Source: MARA.MSTAV
+      
+      - name: is_marked_for_deletion
+        description: Marked for deletion indicator. Source: MARA.LVORM
+      
+      - name: product_is_configurable
+        description: Product is configurable indicator. Source: MARA.KZKFG
+      
+      - name: is_batch_management_required
+        description: Batch management required indicator. Source: MARA.XCHPF
+      
+      - name: quality_mgmt_in_procurement_is_active
+        description: Quality management in procurement active. Source: MARA.QMPUR
