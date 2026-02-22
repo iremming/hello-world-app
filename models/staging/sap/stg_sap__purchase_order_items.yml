@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: stg_sap__purchase_order_items
+    description: "Staging model for SAP purchase order items data. Contains individual line items from purchase orders with details like material, quantity, price, and plant information. Source: EKPO table."
+    columns:
+      - name: purchase_order
+        description: "Purchase order number. Source: EKPO.EBELN"
+        tests:
+          - not_null
+
+      - name: purchase_order_item
+        description: "Purchase order item number. Source: EKPO.EBELP"
+        tests:
+          - not_null
+
+      - name: material
+        description: "Material number. Source: EKPO.MATNR"
+
+      - name: plant
+        description: "Plant code. Source: EKPO.WERKS"
+
+      - name: order_quantity
+        description: "Order quantity. Source: EKPO.MENGE"
+
+      - name: net_price_amount
+        description: "Net price amount. Source: EKPO.NETPR"
+
+      - name: material_group
+        description: "Material group. Source: EKPO.MATKL"
