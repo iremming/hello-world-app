@@ -1,0 +1,53 @@
+version: 2
+
+models:
+  - name: stg_sap__purchase_order_items
+    description: Purchase order items from SAP, representing individual line items on purchase orders. Includes material, quantity, pricing, and delivery information for each item. Source: SAP EKPO table via OData API_PURCHASEORDER_PROCESS_SRV/A_PurchaseOrderItemType.
+    columns:
+      - name: purchaseorder
+        description: Purchase order number. Source: EKPO.EBELN
+        tests:
+          - not_null
+      - name: purchaseorderitem
+        description: Purchase order item number. Source: EKPO.EBELP
+        tests:
+          - not_null
+      - name: material
+        description: Material number. Source: EKPO.MATNR
+      - name: plant
+        description: Plant. Source: EKPO.WERKS
+      - name: storagelocation
+        description: Storage location. Source: EKPO.LGORT
+      - name: orderquantity
+        description: Order quantity. Source: EKPO.MENGE
+      - name: orderpriceunit
+        description: Order price unit. Source: EKPO.PEINH
+      - name: netpriceamount
+        description: Net price amount. Source: EKPO.NETPR
+      - name: materialgroup
+        description: Material group. Source: EKPO.MATKL
+      - name: purchaseorderitemtext
+        description: Purchase order item text. Source: EKPO.TXZ01
+      - name: accountassignmentcategory
+        description: Account assignment category. Source: EKPO.KNTTP
+
+  - name: stg_sap__products
+    description: Products from SAP, representing materials and goods in the system. Includes product type, classification, weight, and base unit information. Source: SAP MARA table via OData API_PRODUCT_SRV/A_ProductType.
+    columns:
+      - name: product
+        description: Product number. Source: MARA.MATNR
+        tests:
+          - not_null
+          - unique
+      - name: producttype
+        description: Product type. Source: MARA.MTART
+      - name: productgroup
+        description: Product group. Source: MARA.MATKL
+      - name: baseunit
+        description: Base unit of measure. Source: MARA.MEINS
+      - name: grossweight
+        description: Gross weight. Source: MARA.BRGEW
+      - name: weightunit
+        description: Weight unit. Source: MARA.GEWEI
+      - name: creationdate
+        description: Creation date. Source: MARA.ERSDA
